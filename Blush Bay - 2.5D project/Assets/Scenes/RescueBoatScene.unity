@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RescueBoatUI
   outsideSceneName: OutsideScene
-  rescueDiveSceneName: RescueDiveScene
+  rescueDiveSceneName: DivingScene
   statusText: {fileID: 1551839367}
   dropNetsButton: {fileID: 673126680}
   goDivingButton: {fileID: 661167808}

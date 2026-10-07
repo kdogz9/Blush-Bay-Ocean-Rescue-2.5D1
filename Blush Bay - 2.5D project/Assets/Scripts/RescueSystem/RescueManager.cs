@@ -17,6 +17,13 @@ public class RescueNet
     public RescuedFish fish;
 }
 
+[System.Serializable]
+public class RehabTankData
+{
+    public string tankId;
+    public List<RescuedFish> fishInTank = new List<RescuedFish>();
+}
+
 public class RescueManager : MonoBehaviour
 {
     public static RescueManager Instance;
@@ -27,6 +34,9 @@ public class RescueManager : MonoBehaviour
 
     [Header("Fish Waiting For Tank")]
     [SerializeField] private List<RescuedFish> fishWaitingForTank = new List<RescuedFish>();
+
+    [Header("Rehabilitation Tanks")]
+    [SerializeField] private List<RehabTankData> rehabTanks = new List<RehabTankData>();
 
     private bool netsHaveBeenDropped = false;
     private bool fishGeneratedForThisDrop = false;
@@ -65,6 +75,7 @@ public class RescueManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         SetUpNets();
+        SetUpDefaultTanks();
     }
 
     private void SetUpNets()
@@ -81,6 +92,28 @@ public class RescueManager : MonoBehaviour
 
             rescueNets.Add(newNet);
         }
+    }
+
+    private void SetUpDefaultTanks()
+    {
+        EnsureTankExists("Tank_1");
+        EnsureTankExists("Tank_2");
+        EnsureTankExists("Tank_3");
+    }
+
+    private void EnsureTankExists(string tankId)
+    {
+        foreach (RehabTankData tank in rehabTanks)
+        {
+            if (tank.tankId == tankId)
+            {
+                return;
+            }
+        }
+
+        RehabTankData newTank = new RehabTankData();
+        newTank.tankId = tankId;
+        rehabTanks.Add(newTank);
     }
 
     public void DropNets()
@@ -106,7 +139,7 @@ public class RescueManager : MonoBehaviour
 
         timesReturnedToBoatAfterDrop++;
 
-        if (timesReturnedToBoatAfterDrop >= 2)
+        if (timesReturnedToBoatAfterDrop >= 1)
         {
             GenerateFishInNets();
         }
@@ -220,13 +253,44 @@ public class RescueManager : MonoBehaviour
         return fishWaitingForTank[0];
     }
 
-    public RescuedFish RemoveNextFishWaitingForTank()
+    public RescuedFish AssignNextFishToTank(string tankId)
     {
-        if (fishWaitingForTank.Count == 0) return null;
+        if (fishWaitingForTank.Count == 0)
+        {
+            Debug.Log("No fish waiting for tank.");
+            return null;
+        }
+
+        EnsureTankExists(tankId);
 
         RescuedFish fish = fishWaitingForTank[0];
         fishWaitingForTank.RemoveAt(0);
 
-        return fish;
+        foreach (RehabTankData tank in rehabTanks)
+        {
+            if (tank.tankId == tankId)
+            {
+                tank.fishInTank.Add(fish);
+                Debug.Log(fish.fishName + " assigned to " + tankId);
+                return fish;
+            }
+        }
+
+        return null;
+    }
+
+    public List<RescuedFish> GetFishInTank(string tankId)
+    {
+        EnsureTankExists(tankId);
+
+        foreach (RehabTankData tank in rehabTanks)
+        {
+            if (tank.tankId == tankId)
+            {
+                return tank.fishInTank;
+            }
+        }
+
+        return new List<RescuedFish>();
     }
 }
