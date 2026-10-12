@@ -5,12 +5,16 @@ public class DivePlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float swimSpeed = 4f;
+    [SerializeField] private float fastSwimMultiplier = 1.5f;
 
-    [Header("Swim Area")]
-    [SerializeField] private float minX = -8f;
-    [SerializeField] private float maxX = 8f;
-    [SerializeField] private float minY = -3.5f;
-    [SerializeField] private float maxY = 3.5f;
+    [Header("Swim Area Bounds")]
+    [SerializeField] private float minX = -10f;
+    [SerializeField] private float maxX = 10f;
+    [SerializeField] private float minY = 0.2f;
+    [SerializeField] private float maxY = 1f;
+
+    [Header("Depth Lock")]
+    [SerializeField] private float lockedZ = 0f;
 
     [Header("Visual")]
     [SerializeField] private SpriteRenderer spriteRenderer;
@@ -21,6 +25,8 @@ public class DivePlayerMovement : MonoBehaviour
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
+
+        lockedZ = transform.position.z;
     }
 
     private void Update()
@@ -43,12 +49,19 @@ public class DivePlayerMovement : MonoBehaviour
 
         move = move.normalized;
 
-        transform.position += move * swimSpeed * Time.deltaTime;
+        float currentSpeed = swimSpeed;
+
+        if (Keyboard.current.leftShiftKey.isPressed)
+        {
+            currentSpeed *= fastSwimMultiplier;
+        }
+
+        transform.position += move * currentSpeed * Time.deltaTime;
 
         float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
         float clampedY = Mathf.Clamp(transform.position.y, minY, maxY);
 
-        transform.position = new Vector3(clampedX, clampedY, transform.position.z);
+        transform.position = new Vector3(clampedX, clampedY, lockedZ);
 
         if (spriteRenderer != null)
         {
