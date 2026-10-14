@@ -23,6 +23,9 @@ public class TankInfoPanelUI : MonoBehaviour
     [SerializeField] private Image fishPreviewImage;
     [SerializeField] private List<TankFishPreviewEntry> fishPreviews = new List<TankFishPreviewEntry>();
 
+    [Header("Health UI")]
+    [SerializeField] private Slider healthSlider;
+
     [Header("Buttons")]
     [SerializeField] private Button treatButton;
     [SerializeField] private Button closeButton;
@@ -53,6 +56,8 @@ public class TankInfoPanelUI : MonoBehaviour
         {
             fishPreviewImage.enabled = false;
         }
+
+        UpdateHealthUI();
     }
 
     public void OpenPanel(string tankId)
@@ -82,6 +87,8 @@ public class TankInfoPanelUI : MonoBehaviour
         {
             fishPreviewImage.enabled = false;
         }
+
+        UpdateHealthUI();
     }
 
     private void RefreshPanel()
@@ -93,6 +100,8 @@ public class TankInfoPanelUI : MonoBehaviour
 
         if (RescueManager.Instance == null)
         {
+            currentFish = null;
+
             if (fishInfoText != null)
             {
                 fishInfoText.text = "RESCUE SYSTEM MISSING.";
@@ -108,6 +117,7 @@ public class TankInfoPanelUI : MonoBehaviour
                 fishPreviewImage.enabled = false;
             }
 
+            UpdateHealthUI();
             return;
         }
 
@@ -132,6 +142,7 @@ public class TankInfoPanelUI : MonoBehaviour
                 fishPreviewImage.enabled = false;
             }
 
+            UpdateHealthUI();
             return;
         }
 
@@ -147,11 +158,28 @@ public class TankInfoPanelUI : MonoBehaviour
         }
 
         UpdateFishPreview(currentFish.fishName);
+        UpdateHealthUI();
 
         if (treatButton != null)
         {
             treatButton.interactable = true;
         }
+    }
+
+    private void UpdateHealthUI()
+    {
+        if (healthSlider == null) return;
+
+        if (currentFish == null)
+        {
+            healthSlider.gameObject.SetActive(false);
+            return;
+        }
+
+        healthSlider.gameObject.SetActive(true);
+        healthSlider.minValue = 0f;
+        healthSlider.maxValue = currentFish.maxHealth;
+        healthSlider.value = currentFish.health;
     }
 
     private void UpdateFishPreview(string fishName)
