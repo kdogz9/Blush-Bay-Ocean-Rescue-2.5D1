@@ -127,7 +127,7 @@ public class RescueBoatUI : MonoBehaviour
         {
             if (statusText != null)
             {
-                statusText.text = "The boat is ready. Drop your fish-safe bait nets.";
+                statusText.text = "Drop your fish-safe bait nets.";
             }
 
             if (dropNetsButton != null) dropNetsButton.interactable = true;
@@ -147,7 +147,7 @@ public class RescueBoatUI : MonoBehaviour
         {
             if (statusText != null)
             {
-                statusText.text = "The rescue nets have been dropped. Come back later to check them.";
+                statusText.text = "The nets have been dropped. Come back later to check them.";
             }
 
             if (dropNetsButton != null) dropNetsButton.interactable = false;

@@ -2,10 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+
 public class RescuedFish
 {
     public string fishName;
     public string injuryType;
+
+    public float health = 25f;
+    public float maxHealth = 100f;
+    public bool hasBeenTreated = false;
 }
 
 [System.Serializable]
@@ -60,7 +65,6 @@ public class RescueManager : MonoBehaviour
         "Damaged fin",
         "Weak swimming",
         "Stress marks",
-        "Needs observation"
     };
 
     private void Awake()
@@ -182,6 +186,30 @@ public class RescueManager : MonoBehaviour
         fish.fishName = possibleFish[Random.Range(0, possibleFish.Length)];
         fish.injuryType = possibleInjuries[Random.Range(0, possibleInjuries.Length)];
 
+        fish.maxHealth = 100f;
+        fish.hasBeenTreated = false;
+
+        if (fish.injuryType == "Small cut")
+        {
+            fish.health = 45f;
+        }
+        else if (fish.injuryType == "Damaged fin")
+        {
+            fish.health = 30f;
+        }
+        else if (fish.injuryType == "Weak swimming")
+        {
+            fish.health = 35f;
+        }
+        else if (fish.injuryType == "Stress marks")
+        {
+            fish.health = 50f;
+        }
+        else
+        {
+            fish.health = 40f;
+        }
+
         return fish;
     }
 
@@ -292,5 +320,35 @@ public class RescueManager : MonoBehaviour
         }
 
         return new List<RescuedFish>();
+    }
+    
+    public void TreatFishInTank(string tankId, int fishIndex, float healthIncrease)
+    {
+        List<RescuedFish> fishInTank = GetFishInTank(tankId);
+
+        if (fishInTank == null || fishInTank.Count == 0)
+        {
+            Debug.Log("No fish in tank to treat.");
+            return;
+        }
+
+        if (fishIndex < 0 || fishIndex >= fishInTank.Count)
+        {
+            Debug.LogWarning("Fish index out of range.");
+            return;
+        }
+
+        RescuedFish fish = fishInTank[fishIndex];
+
+        fish.health += healthIncrease;
+
+        if (fish.health > fish.maxHealth)
+        {
+            fish.health = fish.maxHealth;
+        }
+
+        fish.hasBeenTreated = true;
+
+        Debug.Log("Treated " + fish.fishName + ". Health is now " + fish.health);
     }
 }

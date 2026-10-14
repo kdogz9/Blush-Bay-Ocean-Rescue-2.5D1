@@ -75,7 +75,7 @@ public class SimpleTankDisplay : MonoBehaviour
 
             if (spriteRenderer != null)
             {
-                spriteRenderer.sortingOrder = 20;
+                spriteRenderer.sortingOrder = 0;
             }
 
             spawnedFish.Add(newFish);

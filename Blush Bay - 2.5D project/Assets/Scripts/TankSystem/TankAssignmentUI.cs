@@ -1,12 +1,28 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+[System.Serializable]
+public class FishPreviewEntry
+{
+    public string fishName;
+    public Sprite fishSprite;
+}
 
 public class TankAssignmentUI : MonoBehaviour
 {
     [Header("Panel")]
     [SerializeField] private GameObject assignmentPanel;
-    [SerializeField] private TMP_Text fishInfoText;
+
+    [Header("Text")]
+    [SerializeField] private TMP_Text fishNameText;
+    [SerializeField] private TMP_Text conditionText;
+    [SerializeField] private TMP_Text chooseTankText;
+
+    [Header("Fish Preview")]
+    [SerializeField] private Image fishPreviewImage;
+    [SerializeField] private List<FishPreviewEntry> fishPreviews = new List<FishPreviewEntry>();
 
     [Header("Tank Buttons")]
     [SerializeField] private Button tankOneButton;
@@ -91,14 +107,51 @@ public class TankAssignmentUI : MonoBehaviour
             assignmentPanel.SetActive(true);
         }
 
-        if (fishInfoText != null)
+        if (fishNameText != null)
         {
-            fishInfoText.text =
-                "New rescued fish\n\n" +
-                fish.fishName +
-                "\n\nCondition:\n" +
-                fish.injuryType +
-                "\n\nChoose a rehabilitation tank.";
+            fishNameText.text = fish.fishName.ToUpper();
         }
+
+        if (conditionText != null)
+        {
+            conditionText.text = "CONDITION:\n" + fish.injuryType.ToUpper();
+        }
+
+        if (chooseTankText != null)
+        {
+            chooseTankText.text = "CHOOSE A REHABILITATION TANK";
+        }
+
+        UpdateFishPreview(fish.fishName);
+    }
+
+    private void UpdateFishPreview(string fishName)
+    {
+        if (fishPreviewImage == null) return;
+
+        Sprite spriteToUse = GetFishPreviewSprite(fishName);
+
+        if (spriteToUse == null)
+        {
+            fishPreviewImage.enabled = false;
+            return;
+        }
+
+        fishPreviewImage.enabled = true;
+        fishPreviewImage.sprite = spriteToUse;
+        fishPreviewImage.preserveAspect = true;
+    }
+
+    private Sprite GetFishPreviewSprite(string fishName)
+    {
+        foreach (FishPreviewEntry entry in fishPreviews)
+        {
+            if (entry.fishName == fishName)
+            {
+                return entry.fishSprite;
+            }
+        }
+
+        return null;
     }
 }
