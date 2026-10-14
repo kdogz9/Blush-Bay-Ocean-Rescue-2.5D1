@@ -1,13 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class FishVisualEntry
+{
+    public string fishName;
+    public GameObject fishPrefab;
+}
+
 public class SimpleTankDisplay : MonoBehaviour
 {
     [Header("Tank")]
     [SerializeField] private string tankId = "Tank_1";
 
-    [Header("Fish Visual")]
-    [SerializeField] private GameObject fishVisualPrefab;
+    [Header("Fish Visuals")]
+    [SerializeField] private List<FishVisualEntry> fishVisuals = new List<FishVisualEntry>();
+    [SerializeField] private GameObject fallbackFishPrefab;
     [SerializeField] private Transform fishSpawnParent;
 
     [Header("Spacing")]
@@ -30,12 +38,6 @@ public class SimpleTankDisplay : MonoBehaviour
             return;
         }
 
-        if (fishVisualPrefab == null)
-        {
-            Debug.LogWarning("SimpleTankDisplay on " + gameObject.name + ": Fish Visual Prefab is missing.");
-            return;
-        }
-
         if (fishSpawnParent == null)
         {
             Debug.LogWarning("SimpleTankDisplay on " + gameObject.name + ": Fish Spawn Parent is missing.");
@@ -48,10 +50,20 @@ public class SimpleTankDisplay : MonoBehaviour
 
         for (int i = 0; i < fishInTank.Count; i++)
         {
+            RescuedFish rescuedFish = fishInTank[i];
+
+            GameObject prefabToSpawn = GetFishPrefab(rescuedFish.fishName);
+
+            if (prefabToSpawn == null)
+            {
+                Debug.LogWarning("No fish prefab found for: " + rescuedFish.fishName);
+                continue;
+            }
+
             Vector3 spawnOffset = new Vector3(i * spacing, 0f, 0f);
 
             GameObject newFish = Instantiate(
-                fishVisualPrefab,
+                prefabToSpawn,
                 fishSpawnParent.position + spawnOffset,
                 fishSpawnParent.rotation,
                 fishSpawnParent
@@ -68,8 +80,21 @@ public class SimpleTankDisplay : MonoBehaviour
 
             spawnedFish.Add(newFish);
 
-            Debug.Log("Spawned fish visual in " + tankId + " at " + newFish.transform.position);
+            Debug.Log("Spawned " + rescuedFish.fishName + " in " + tankId);
         }
+    }
+
+    private GameObject GetFishPrefab(string fishName)
+    {
+        foreach (FishVisualEntry entry in fishVisuals)
+        {
+            if (entry.fishName == fishName)
+            {
+                return entry.fishPrefab;
+            }
+        }
+
+        return fallbackFishPrefab;
     }
 
     private void ClearFish()

@@ -628,6 +628,59 @@ Transform:
   - {fileID: 1568315594}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &384190584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 384190586}
+  - component: {fileID: 384190585}
+  m_Layer: 0
+  m_Name: Tankcollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &384190585
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384190584}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.3551002, y: 1.8328432, z: 0.5497391}
+  m_Center: {x: -2.051494, y: -0.58914167, z: 0.8491479}
+--- !u!4 &384190586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384190584}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.849965, y: 0.928528, z: -0.78330994}
+  m_LocalScale: {x: 1.4094433, y: 1.2766254, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2075313359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,7 +1712,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleTankDisplay
   tankId: Tank_1
-  fishVisualPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  fishVisuals:
+  - fishName: Clownfish
+    fishPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  - fishName: Butterfly fish
+    fishPrefab: {fileID: 3387804651299236092, guid: 3702bc8d3c67fb74180d26d3b849b67c, type: 3}
+  - fishName: Jelly fish
+    fishPrefab: {fileID: 1634552863650948841, guid: 7ebfaeef3cb6f214381252b6e06b8256, type: 3}
+  - fishName: Seahorse
+    fishPrefab: {fileID: 7607165006713847683, guid: 24d076e0ff279c04e8d43682097b6ccc, type: 3}
+  - fishName: Squid
+    fishPrefab: {fileID: 8596333666636867376, guid: 056849e32bbb9cc46a0a98ac092c3608, type: 3}
+  - fishName: Turtle
+    fishPrefab: {fileID: 7767824707017660391, guid: 460ef3e6231cd2c46b8402d4e7b3215d, type: 3}
+  fallbackFishPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
   fishSpawnParent: {fileID: 1558252154}
   spacing: 0.35
 --- !u!212 &832056356
@@ -1735,6 +1801,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1558252154}
+  - {fileID: 1941894084}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
@@ -3596,7 +3663,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleTankDisplay
   tankId: Tank_3
-  fishVisualPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  fishVisuals:
+  - fishName: Clownfish
+    fishPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  - fishName: Butterfly fish
+    fishPrefab: {fileID: 3387804651299236092, guid: 3702bc8d3c67fb74180d26d3b849b67c, type: 3}
+  - fishName: Jelly fish
+    fishPrefab: {fileID: 1634552863650948841, guid: 7ebfaeef3cb6f214381252b6e06b8256, type: 3}
+  - fishName: Seahorse
+    fishPrefab: {fileID: 7607165006713847683, guid: 24d076e0ff279c04e8d43682097b6ccc, type: 3}
+  - fishName: Squid
+    fishPrefab: {fileID: 8596333666636867376, guid: 056849e32bbb9cc46a0a98ac092c3608, type: 3}
+  - fishName: Turtle
+    fishPrefab: {fileID: 7767824707017660391, guid: 460ef3e6231cd2c46b8402d4e7b3215d, type: 3}
+  fallbackFishPrefab: {fileID: 0}
   fishSpawnParent: {fileID: 1686620879}
   spacing: 0.35
 --- !u!212 &1873534835
@@ -3672,6 +3752,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1686620879}
+  - {fileID: 1983574088}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1919360259
@@ -3727,6 +3808,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 886639969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1941894083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1941894084}
+  - component: {fileID: 1941894085}
+  m_Layer: 0
+  m_Name: 'Tankcollider '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1941894084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941894083}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.8732207, y: 0.92852813, z: -0.78330994}
+  m_LocalScale: {x: 1.4094433, y: 1.2766254, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 832056357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1941894085
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1941894083}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.4059887, y: 1.8328432, z: 0.5497391}
+  m_Center: {x: -7.1035347, y: -0.58914167, z: 0.8491479}
 --- !u!1 &1943545342
 GameObject:
   m_ObjectHideFlags: 0
@@ -3797,6 +3931,59 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5205245, y: 2.5900211, z: 0.9862186}
   m_Center: {x: -0.76026225, y: 3.076476, z: 2.0526924}
+--- !u!1 &1983574087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1983574088}
+  - component: {fileID: 1983574089}
+  m_Layer: 0
+  m_Name: 'Tankcollider '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1983574088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983574087}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.8732207, y: 0.92852813, z: 1.1766901}
+  m_LocalScale: {x: 1.4094433, y: 1.2766254, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1873534836}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1983574089
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983574087}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.3551002, y: 1.8328432, z: 0.47686344}
+  m_Center: {x: -2.051494, y: -0.58914167, z: -1.1048579}
 --- !u!1 &2016726950
 GameObject:
   m_ObjectHideFlags: 0
@@ -4056,7 +4243,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SimpleTankDisplay
   tankId: Tank_2
-  fishVisualPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  fishVisuals:
+  - fishName: Clownfish
+    fishPrefab: {fileID: 3161307150158183639, guid: 96c367451065f97478ebf2d068ace89a, type: 3}
+  - fishName: Butterfly fish
+    fishPrefab: {fileID: 3387804651299236092, guid: 3702bc8d3c67fb74180d26d3b849b67c, type: 3}
+  - fishName: Jelly fish
+    fishPrefab: {fileID: 1634552863650948841, guid: 7ebfaeef3cb6f214381252b6e06b8256, type: 3}
+  - fishName: Seahorse
+    fishPrefab: {fileID: 7607165006713847683, guid: 24d076e0ff279c04e8d43682097b6ccc, type: 3}
+  - fishName: Squid
+    fishPrefab: {fileID: 8596333666636867376, guid: 056849e32bbb9cc46a0a98ac092c3608, type: 3}
+  - fishName: Turtle
+    fishPrefab: {fileID: 7767824707017660391, guid: 460ef3e6231cd2c46b8402d4e7b3215d, type: 3}
+  fallbackFishPrefab: {fileID: 0}
   fishSpawnParent: {fileID: 1255394461}
   spacing: 0.35
 --- !u!212 &2075313358
@@ -4132,6 +4332,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1255394461}
+  - {fileID: 384190586}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2110935435

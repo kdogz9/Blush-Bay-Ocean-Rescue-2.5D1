@@ -48,10 +48,10 @@ public class RescueManager : MonoBehaviour
     private string[] possibleFish =
     {
         "Clownfish",
-        "Blue Tang",
-        "Royal Gramma",
-        "Firefish",
-        "Pufferfish"
+        "Butterfly fish",
+        "Jelly fish",
+        "Squid",
+        "Seahorse"
     };
 
     private string[] possibleInjuries =
