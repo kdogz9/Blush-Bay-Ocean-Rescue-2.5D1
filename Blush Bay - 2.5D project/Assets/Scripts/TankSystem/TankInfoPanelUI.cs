@@ -12,22 +12,19 @@ public class TankFishPreviewEntry
 
 public class TankInfoPanelUI : MonoBehaviour
 {
-    [Header("Panel")]
-    [SerializeField] private GameObject panel;
+    [Header("Panel")] [SerializeField] private GameObject panel;
 
-    [Header("Text")]
-    [SerializeField] private TMP_Text titleText;
+    [Header("Text")] [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text fishInfoText;
 
-    [Header("Fish Preview")]
-    [SerializeField] private Image fishPreviewImage;
+    [Header("Fish Preview")] [SerializeField]
+    private Image fishPreviewImage;
+
     [SerializeField] private List<TankFishPreviewEntry> fishPreviews = new List<TankFishPreviewEntry>();
 
-    [Header("Health UI")]
-    [SerializeField] private Slider healthSlider;
+    [Header("Health UI")] [SerializeField] private Slider healthSlider;
 
-    [Header("Buttons")]
-    [SerializeField] private Button treatButton;
+    [Header("Buttons")] [SerializeField] private Button treatButton;
     [SerializeField] private Button closeButton;
 
     private string currentTankId;
@@ -212,6 +209,7 @@ public class TankInfoPanelUI : MonoBehaviour
         return null;
     }
 
+
     private void StartTreatment()
     {
         if (currentFish == null)
@@ -220,8 +218,27 @@ public class TankInfoPanelUI : MonoBehaviour
             return;
         }
 
-        Debug.Log("Start treatment for " + currentFish.fishName + " in " + currentTankId);
+        if (OintmentMiniGame.Instance == null)
+        {
+            Debug.LogWarning(
+                "OintmentMiniGame is missing from the scene."
+            );
+            return;
+        }
 
-        // Treatment mini-game will be connected here next.
+        Sprite selectedFishSprite =
+            GetFishSprite(currentFish.fishName);
+
+        bool started = OintmentMiniGame.Instance.StartMiniGame(
+            currentTankId,
+            0,
+            selectedFishSprite
+        );
+
+        if (started)
+        {
+            ClosePanel();
+        }
     }
 }
+
