@@ -29,6 +29,13 @@ public class BubbleSpawner : MonoBehaviour
     [SerializeField] private float maxWobbleSpeed = 2.5f;
 
     private float spawnTimer;
+    
+    private int visibleBubbleLimit = 10;
+
+    public void SetVisibleBubbleLimit(int limit)
+    {
+        visibleBubbleLimit = Mathf.Clamp(limit, 0, maxBubbles);
+    }
 
     private class BubbleData
     {
@@ -194,6 +201,19 @@ public class BubbleSpawner : MonoBehaviour
         for (int i = activeBubbles.Count - 1; i >= 0; i--)
         {
             BubbleData data = activeBubbles[i];
+            
+            // Gradually fade bubbles depending on oxygen level.
+            float targetAlpha = i < visibleBubbleLimit ? 1f : 0f;
+
+            Color bubbleColor = data.bubble.color;
+
+            bubbleColor.a = Mathf.MoveTowards(
+                bubbleColor.a,
+                targetAlpha,
+                Time.deltaTime * 2f
+            );
+
+            data.bubble.color = bubbleColor;
 
             // Track how long this bubble has existed.
             data.lifetime += Time.deltaTime;
