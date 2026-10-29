@@ -351,4 +351,46 @@ public class RescueManager : MonoBehaviour
 
         Debug.Log("Treated " + fish.fishName + ". Health is now " + fish.health);
     }
+    
+    [Header("Fish Selected for Release")]
+    public string SelectedReleaseTankId { get; private set; }
+    public int SelectedReleaseFishIndex { get; private set; } = -1;
+    public RescuedFish SelectedReleaseFish { get; private set; }
+    public Sprite SelectedReleaseFishSprite { get; private set; }
+
+    public bool SelectFishForRelease(
+        string tankId,
+        int fishIndex,
+        Sprite fishSprite)
+    {
+        List<RescuedFish> fishInTank = GetFishInTank(tankId);
+
+        if (fishInTank == null ||
+            fishIndex < 0 ||
+            fishIndex >= fishInTank.Count)
+        {
+            Debug.LogWarning("No valid fish found for release.");
+            return false;
+        }
+
+        RescuedFish fish = fishInTank[fishIndex];
+
+        // Fish must be fully healed before release.
+        if (fish == null || fish.health < fish.maxHealth)
+        {
+            Debug.LogWarning("Fish is not fully healed.");
+            return false;
+        }
+
+        // Remember this specific fish and its tank.
+        SelectedReleaseTankId = tankId;
+        SelectedReleaseFishIndex = fishIndex;
+        SelectedReleaseFish = fish;
+        SelectedReleaseFishSprite = fishSprite;
+
+        Debug.Log("Selected " + fish.fishName + " for release.");
+
+        return true;
+    }
+
 }

@@ -1,7 +1,9 @@
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class TankFishPreviewEntry
@@ -12,19 +14,24 @@ public class TankFishPreviewEntry
 
 public class TankInfoPanelUI : MonoBehaviour
 {
-    [Header("Panel")] [SerializeField] private GameObject panel;
+    [Header("Panel")]
+    [SerializeField] private GameObject panel;
 
-    [Header("Text")] [SerializeField] private TMP_Text titleText;
+    [Header("Text")]
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text fishInfoText;
 
-    [Header("Fish Preview")] [SerializeField]
-    private Image fishPreviewImage;
+    [Header("Fish Preview")]
+    [SerializeField] private Image fishPreviewImage;
+    [SerializeField] private List<TankFishPreviewEntry> fishPreviews =
+        new List<TankFishPreviewEntry>();
 
-    [SerializeField] private List<TankFishPreviewEntry> fishPreviews = new List<TankFishPreviewEntry>();
+    [Header("Health UI")]
+    [SerializeField] private Slider healthSlider;
 
-    [Header("Health UI")] [SerializeField] private Slider healthSlider;
-
-    [Header("Buttons")] [SerializeField] private Button treatButton;
+    [Header("Buttons")]
+    [SerializeField] private Button treatButton;
+    [SerializeField] private Button releaseButton;
     [SerializeField] private Button closeButton;
 
     private string currentTankId;
@@ -49,12 +56,19 @@ public class TankInfoPanelUI : MonoBehaviour
             treatButton.onClick.AddListener(StartTreatment);
         }
 
+        if (releaseButton != null)
+        {
+            releaseButton.onClick.RemoveAllListeners();
+            releaseButton.onClick.AddListener(StartRelease);
+        }
+
         if (fishPreviewImage != null)
         {
             fishPreviewImage.enabled = false;
         }
 
         UpdateHealthUI();
+        UpdateButtons();
     }
 
     public void OpenPanel(string tankId)
@@ -86,13 +100,15 @@ public class TankInfoPanelUI : MonoBehaviour
         }
 
         UpdateHealthUI();
+        UpdateButtons();
     }
 
     private void RefreshPanel()
     {
         if (titleText != null)
         {
-            titleText.text = currentTankId.Replace("_", " ").ToUpper();
+            titleText.text =
+                currentTankId.Replace("_", " ").ToUpper();
         }
 
         if (RescueManager.Instance == null)
@@ -104,21 +120,18 @@ public class TankInfoPanelUI : MonoBehaviour
                 fishInfoText.text = "RESCUE SYSTEM MISSING.";
             }
 
-            if (treatButton != null)
-            {
-                treatButton.interactable = false;
-            }
-
             if (fishPreviewImage != null)
             {
                 fishPreviewImage.enabled = false;
             }
 
             UpdateHealthUI();
+            UpdateButtons();
             return;
         }
 
-        List<RescuedFish> fishInTank = RescueManager.Instance.GetFishInTank(currentTankId);
+        List<RescuedFish> fishInTank =
+            RescueManager.Instance.GetFishInTank(currentTankId);
 
         if (fishInTank == null || fishInTank.Count == 0)
         {
@@ -126,12 +139,8 @@ public class TankInfoPanelUI : MonoBehaviour
 
             if (fishInfoText != null)
             {
-                fishInfoText.text = "NO RESCUED FISH IN THIS TANK YET.";
-            }
-
-            if (treatButton != null)
-            {
-                treatButton.interactable = false;
+                fishInfoText.text =
+                    "NO RESCUED FISH IN THIS TANK YET.";
             }
 
             if (fishPreviewImage != null)
@@ -140,10 +149,11 @@ public class TankInfoPanelUI : MonoBehaviour
             }
 
             UpdateHealthUI();
+            UpdateButtons();
             return;
         }
 
-        // For now we show the first fish in the tank.
+        // Currently displays the first fish in the tank.
         currentFish = fishInTank[0];
 
         if (fishInfoText != null)
@@ -156,11 +166,7 @@ public class TankInfoPanelUI : MonoBehaviour
 
         UpdateFishPreview(currentFish.fishName);
         UpdateHealthUI();
-
-        if (treatButton != null)
-        {
-            treatButton.interactable = true;
-        }
+        UpdateButtons();
     }
 
     private void UpdateHealthUI()
@@ -177,6 +183,37 @@ public class TankInfoPanelUI : MonoBehaviour
         healthSlider.minValue = 0f;
         healthSlider.maxValue = currentFish.maxHealth;
         healthSlider.value = currentFish.health;
+    }
+
+    private void UpdateButtons()
+    {
+        // Disable both buttons when there is no fish.
+        if (currentFish == null)
+        {
+            if (treatButton != null)
+                treatButton.interactable = false;
+
+            if (releaseButton != null)
+                releaseButton.interactable = false;
+
+            return;
+        }
+
+        // Check whether this particular fish is fully healed.
+        bool fullyHealed =
+            currentFish.health >= currentFish.maxHealth;
+
+        // Fish still needs treatment.
+        if (treatButton != null)
+        {
+            treatButton.interactable = !fullyHealed;
+        }
+
+        // Fish can only be released at full health.
+        if (releaseButton != null)
+        {
+            releaseButton.interactable = fullyHealed;
+        }
     }
 
     private void UpdateFishPreview(string fishName)
@@ -209,14 +246,13 @@ public class TankInfoPanelUI : MonoBehaviour
         return null;
     }
 
-
     private void StartTreatment()
     {
-        if (currentFish == null)
-        {
-            Debug.Log("No fish selected for treatment.");
+        if (currentFish == null) return;
+
+        // Don't treat fish that are already fully healed.
+        if (currentFish.health >= currentFish.maxHealth)
             return;
-        }
 
         if (OintmentMiniGame.Instance == null)
         {
@@ -240,5 +276,37 @@ public class TankInfoPanelUI : MonoBehaviour
             ClosePanel();
         }
     }
-}
 
+    
+    private void StartRelease()
+    {
+        if (currentFish == null) return;
+
+        if (RescueManager.Instance == null)
+        {
+            Debug.LogWarning("RescueManager is missing.");
+            return;
+        }
+
+        // Find the correct sprite for this fish.
+        Sprite selectedFishSprite =
+            GetFishSprite(currentFish.fishName);
+
+        // Store the selected fish before switching scenes.
+        bool readyToRelease =
+            RescueManager.Instance.SelectFishForRelease(
+                currentTankId,
+                0,
+                selectedFishSprite
+            );
+
+        if (!readyToRelease)
+        {
+            return;
+        }
+
+        // Open the release mini-game scene.
+        SceneManager.LoadScene("ReleaseScene");
+    }
+
+}
