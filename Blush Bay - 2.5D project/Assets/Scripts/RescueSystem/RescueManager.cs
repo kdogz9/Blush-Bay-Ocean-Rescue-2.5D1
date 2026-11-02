@@ -265,6 +265,8 @@ public class RescueManager : MonoBehaviour
 
         collectedFish = net.fish;
         fishWaitingForTank.Add(collectedFish);
+        // Record this fish as successfully rescued.
+        BlushBayTelemetry.Instance?.RecordRescue(collectedFish);
 
         net.hasFish = false;
         net.fish = null;
@@ -348,6 +350,8 @@ public class RescueManager : MonoBehaviour
         }
 
         fish.hasBeenTreated = true;
+        // Record this fish receiving treatment.
+        BlushBayTelemetry.Instance?.RecordTreatment(fish);
 
         Debug.Log("Treated " + fish.fishName + ". Health is now " + fish.health);
     }

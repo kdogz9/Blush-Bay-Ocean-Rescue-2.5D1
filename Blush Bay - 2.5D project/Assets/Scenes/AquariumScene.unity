@@ -1112,7 +1112,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1191037291}
   - {fileID: 1727447654}
   - {fileID: 1943545343}
   - {fileID: 1568315594}
@@ -3355,6 +3354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1191037291}
   - component: {fileID: 1191037292}
+  - component: {fileID: 1191037293}
   m_Layer: 0
   m_Name: RescueManager
   m_TagString: Untagged
@@ -3371,11 +3371,11 @@ Transform:
   m_GameObject: {fileID: 1191037290}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.26149, y: 0.72104, z: -0.35176}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 363038897}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1191037292
 MonoBehaviour:
@@ -3393,6 +3393,20 @@ MonoBehaviour:
   rescueNets: []
   fishWaitingForTank: []
   rehabTanks: []
+--- !u!114 &1191037293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191037290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8969d03348294ab409c23874dee60fd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlushBayTelemetry
+  consentGranted: 1
+  gameVersion: 0.1
 --- !u!1 &1217740358
 GameObject:
   m_ObjectHideFlags: 0
@@ -6416,8 +6430,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5834951, y: 3.6402159, z: 3.0978985}
-  m_Center: {x: 2.505762, y: 1.3201079, z: -4.325408}
+  m_Size: {x: 1.2560596, y: 3.6402159, z: 2.7967148}
+  m_Center: {x: 2.3420439, y: 1.3201079, z: -4.174816}
 --- !u!4 &1919360261
 Transform:
   m_ObjectHideFlags: 0
@@ -7401,8 +7415,8 @@ Transform:
   m_GameObject: {fileID: 2110935435}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.26149, y: -0.72104, z: 1.64176}
-  m_LocalScale: {x: 12, y: 0.2, z: 8}
+  m_LocalPosition: {x: 1.354, y: -0.72104, z: 1.64176}
+  m_LocalScale: {x: 12.184801, y: 0.2, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1358681651}
@@ -7507,3 +7521,4 @@ SceneRoots:
   - {fileID: 363038897}
   - {fileID: 886639969}
   - {fileID: 1358681651}
+  - {fileID: 1191037291}
