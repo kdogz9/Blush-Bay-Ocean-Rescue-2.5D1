@@ -11,13 +11,13 @@ public class VisitorNavMeshSetup : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        // Prevent the pixel-art character from rotating.
+        // Keep the pixel-art visitor facing the camera.
         agent.updateRotation = false;
     }
 
     private void Update()
     {
-        // Press P to check the visitor's navigation.
+        // Press P to check the exit navigation.
         if (Keyboard.current == null ||
             !Keyboard.current.pKey.wasPressedThisFrame)
         {
@@ -30,53 +30,45 @@ public class VisitorNavMeshSetup : MonoBehaviour
             return;
         }
 
-        Debug.Log("Visitor Path Status: " + agent.pathStatus);
-        Debug.Log("Visitor Has Path: " + agent.hasPath);
-        Debug.Log("Visitor Path Pending: " + agent.pathPending);
-        Debug.Log("Visitor Remaining Distance: " + agent.remainingDistance);
-        Debug.Log("Visitor Destination: " + agent.destination);
-        Debug.Log("Visitor Position: " + transform.position);
+        GameObject exitPoint = GameObject.Find("VisitorExitPoint");
 
-        GameObject tank = GameObject.Find("Tank_3");
-
-        if (tank != null)
+        if (exitPoint == null)
         {
-            Transform standPoint =
-                tank.transform.Find("VisitorStandPoint");
+            Debug.LogWarning("VisitorExitPoint not found!");
+            return;
+        }
 
-           
-            if (standPoint != null)
-            {
-                Debug.Log("Tank 3 StandPoint Position: " +
-                          standPoint.position);
+        Debug.Log("Visitor Position: " + transform.position);
+        Debug.Log("Exit Point Position: " + exitPoint.transform.position);
 
-                // Check whether the standing point is near the NavMesh.
-                bool foundNavMesh = NavMesh.SamplePosition(
-                    standPoint.position,
-                    out NavMeshHit hit,
-                    0.75f,
-                    NavMesh.AllAreas
-                );
+        // Check whether the exit is on or near the NavMesh.
+        bool exitOnNavMesh = NavMesh.SamplePosition(
+            exitPoint.transform.position,
+            out NavMeshHit hit,
+            1f,
+            agent.areaMask
+        );
 
-                Debug.Log("Tank 3 StandPoint near NavMesh: " + foundNavMesh);
+        Debug.Log("Exit Point near NavMesh: " + exitOnNavMesh);
 
-                if (foundNavMesh)
-                {
-                    Debug.Log("Nearest NavMesh Position: " + hit.position);
 
-                    // Check whether the visitor can reach that point.
-                    NavMeshPath testPath = new NavMeshPath();
+        if (NavMesh.SamplePosition(
+                exitPoint.transform.position,
+                out NavMeshHit nearestPoint,
+                10f,
+                agent.areaMask))
+        {
+            Debug.Log("Nearest walkable position: " + nearestPoint.position);
 
-                    bool pathFound = agent.CalculatePath(
-                        hit.position,
-                        testPath
-                    );
-
-                    Debug.Log("Path to Tank 3 possible: " + pathFound);
-                    Debug.Log("Path to Tank 3 status: " + testPath.status);
-                }
-            }
-
+            Debug.Log("Distance from exit to NavMesh: " +
+                      Vector3.Distance(
+                          exitPoint.transform.position,
+                          nearestPoint.position
+                      ).ToString("F2"));
+        }
+        else
+        {
+            Debug.LogWarning("No nearby walkable NavMesh found.");
         }
     }
 }
