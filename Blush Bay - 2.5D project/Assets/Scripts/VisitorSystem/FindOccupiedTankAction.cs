@@ -26,43 +26,68 @@ public partial class FindOccupiedTankAction : Action
 
     protected override Status OnUpdate()
     {
-        // Check twice per second rather than every frame.
+        // Check every half-second instead of every frame.
         if (Time.time < nextCheckTime)
+        {
             return Status.Running;
+        }
 
         nextCheckTime = Time.time + 0.5f;
 
+        // Wait until RescueManager is available.
         if (RescueManager.Instance == null)
+        {
             return Status.Running;
+        }
 
+        // Check the three rehabilitation tanks.
         string[] tankIds = { "Tank_1", "Tank_2", "Tank_3" };
 
         foreach (string tankId in tankIds)
         {
-            var fishInTank = RescueManager.Instance.GetFishInTank(tankId);
+            // Check if this tank contains fish.
+            var fishInTank =
+                RescueManager.Instance.GetFishInTank(tankId);
 
             if (fishInTank != null && fishInTank.Count > 0)
             {
+                // Find the occupied tank in the scene.
                 GameObject tankObject = GameObject.Find(tankId);
-                // finds that tank in the scene 
 
                 if (tankObject != null)
                 {
-                    TargetTank.Value = tankObject;
-                    // stores the chosen tank for the visitor 
+                    // Find the visitor standing point.
+                    Transform standPoint =
+                        tankObject.transform.Find("VisitorStandPoint");
 
-                    Debug.Log("Visitor AI: Fish found in " + tankId);
+                    if (standPoint != null)
+                    {
+                        // Assign the standing point as the target.
+                        TargetTank.Value = standPoint.gameObject;
 
-                    return Status.Success;
+                        Debug.Log(
+                            "Visitor AI: Walking to " + tankId
+                        );
+
+                        // Continue to the movement action.
+                        return Status.Success;
+                    }
+                    else
+                    {
+                        Debug.LogWarning(
+                            "VisitorStandPoint missing from " + tankId
+                        );
+                    }
                 }
             }
         }
 
-        // No fish yet, so keep waiting.
+        // No occupied tank found, so keep waiting.
         return Status.Running;
     }
 
-    
+
+
     protected override void OnEnd()
     {
     }
